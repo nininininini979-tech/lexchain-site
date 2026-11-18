@@ -621,6 +621,146 @@
       "type": "bool",
       "group": "合同效力",
       "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_below_minimum",
+      "label": "支付工资低于当地最低工资标准",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_deducted",
+      "label": "用人单位存在从工资中扣除款项的行为",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_deduction_lawful",
+      "label": "扣除属于法定代扣（个税/社保/抚养费赡养费/法律法规允许）",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_pay_interval_over_30_days",
+      "label": "全日制工资支付间隔超过30日",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_paid_at_least_monthly",
+      "label": "工资已按至少每月一次的周期支付",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "item_claimed_as_wage",
+      "label": "争议款项（奖金/提成/津贴等）被主张为劳动报酬",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_record_kept_2years",
+      "label": "书面工资记录已保存两年以上备查",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_list_provided",
+      "label": "支付工资时已向劳动者提供工资清单",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "employment_terminated",
+      "label": "劳动合同已解除或终止",
+      "type": "bool",
+      "group": "解除与终止",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "final_wage_paid_in_full",
+      "label": "解除或终止时已一次性付清劳动者工资",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "employer_bankruptcy",
+      "label": "用人单位已被宣告破产",
+      "type": "bool",
+      "group": "主体资格",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_claim_in_bankruptcy",
+      "label": "劳动者存在破产程序中的工资债权",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_delayed",
+      "label": "用人单位未按约定或国家规定及时足额支付劳动报酬",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "order_not_complied",
+      "label": "责令限期支付后逾期仍未支付",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "year_end_bonus_claimed",
+      "label": "劳动者主张年终奖（含离职后按比例主张）",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "bonus_excluded_by_valid_rules",
+      "label": "年终奖不发/不发或少发的约定或规章经民主程序制定且已公示",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "commission_wage_claimed",
+      "label": "劳动者主张提成工资",
+      "type": "bool",
+      "group": "工资支付",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "outdoor_work_over_35c",
+      "label": "安排劳动者在35℃以上高温天气从事室外露天作业",
+      "type": "bool",
+      "group": "劳动保护",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "indoor_temp_over_33c",
+      "label": "工作场所温度未有效降至33℃以下",
+      "type": "bool",
+      "group": "劳动保护",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "heat_allowance_paid",
+      "label": "已发放高温津贴并纳入工资总额",
+      "type": "bool",
+      "group": "劳动保护",
+      "nature": "OBSERVATION"
     }
   ],
   "rules": [
@@ -2377,6 +2517,463 @@
         "limitations": [
           "跨规则效果传导或参照适用的裁判口径各地存在差异",
           "暂无专门测试用例（WB-010 计划补充）"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-2",
+      "source": "《劳动法》第四十八条、第五十条（各地最低工资规定）",
+      "text": "国家实行最低工资保障制度，最低工资具体标准由省、自治区、直辖市人民政府规定。用人单位支付劳动者的工资不得低于当地最低工资标准。不得以实物及有价证券替代货币支付。",
+      "category": "prohibition",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_below_minimum",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "FORBIDDEN",
+        "bearer": "用人单位",
+        "act": "支付低于当地最低工资标准的工资",
+        "symbol": "F(employer, WageBelowMinimum)"
+      },
+      "remedy": "用人单位应补足差额；劳动者可依《劳动合同法》第八十五条主张由劳动行政部门责令限期支付差额，逾期不支付的可加付赔偿金（见 R85）。",
+      "risk_note": "最低工资标准以当地省级政府公布为准且定期调整，须核实案涉期间适用的标准与档次；最低工资不包含加班费、高温/夜班等特殊工作环境津贴（各地口径）。试用期工资、经济补偿基数下限均与本条联动。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确（《劳动法》第48条；标准数额以地方规定为准）",
+        "limitations": [
+          "当地最低工资标准的具体数额需按案发时点与地区核实"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-3",
+      "source": "《工资支付暂行规定》第十五条",
+      "text": "用人单位不得克扣劳动者工资。有下列情况之一的，用人单位可以代扣劳动者工资：（一）代扣代缴个人所得税；（二）代扣代缴应由劳动者个人负担的各项社会保险费用；（三）法院判决、裁定中要求代扣的抚养费、赡养费；（四）法律、法规规定可以从劳动者工资中扣除的其他费用。",
+      "category": "prohibition",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_deducted",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X30-3-1",
+          "source": "《工资支付暂行规定》第十五条（法定代扣）",
+          "desc": "扣除属于第十五条列举的法定代扣情形（个税、个人负担社保费、法院裁判代扣的抚养费赡养费、法律法规允许的其他费用）",
+          "all": [
+            {
+              "fact": "wage_deduction_lawful",
+              "eq": true
+            }
+          ]
+        }
+      ],
+      "deontic": {
+        "operator": "FORBIDDEN",
+        "bearer": "用人单位",
+        "act": "克扣劳动者工资（法定代扣除外）",
+        "symbol": "F(employer, WageDeduction)"
+      },
+      "remedy": "被克扣的工资应返还；可依《劳动合同法》第八十五条主张责令限期支付及逾期加付赔偿金（见 R85）。造成损失的应赔偿。",
+      "risk_note": "克扣与代扣的界分是本条核心：除四种法定情形外，任何以罚款、赔偿、押金等名义的单方扣除均构成克扣。因劳动者本人原因造成经济损失的赔偿扣除另受第十六条 20% 双限规则约束（见 R16-P）。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-4",
+      "source": "《工资支付暂行规定》第七条",
+      "text": "工资必须在用人单位与劳动者约定的日期支付。如遇节假日或休息日，则应提前在最近的工作日支付。工资至少每月支付一次，实行周、日、小时工资制的可按周、日、小时支付工资。非全日制用工劳动报酬结算支付周期最长不得超过十五日（《劳动合同法》第七十二条）。",
+      "category": "obligation",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_pay_interval_over_30_days",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "OBLIGATION",
+        "bearer": "用人单位",
+        "act": "按约定日期至少每月一次支付工资",
+        "symbol": "O(employer, WagePayCycle)"
+      },
+      "breach": {
+        "all": [
+          {
+            "fact": "wage_paid_at_least_monthly",
+            "eq": true
+          }
+        ]
+      },
+      "remedy": "逾期未支付的构成拖欠，可依 R30/R85 主张支付令、行政责令支付及逾期加付赔偿金。",
+      "risk_note": "非全日制用工的结算周期上限为15日（R70 联动）；\"超过30日未支付\"的认定需排除双方约定变更支付日的情形。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-5",
+      "source": "《工资支付暂行规定》第三条（工资组成认定，各地规定细化）",
+      "text": "本规定所称工资是指用人单位依据劳动合同的规定，以各种形式支付给劳动者的工资报酬。计时工资、计件工资、奖金、津贴和补贴、加班加点工资以及特殊情况下支付的工资均属劳动报酬的组成部分。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "item_claimed_as_wage",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张争议款项计入劳动报酬并纳入相应保护",
+        "symbol": "P(worker, ItemAsWage)"
+      },
+      "remedy": "被排除在\"工资\"外的款项将连带影响经济补偿基数、加班费基数、未签合同二倍工资基数等的计算，应先行认定。",
+      "risk_note": "\"工资组成\"各地口径存在差异：如年终奖、提成、津贴是否计入经济补偿与加班费基数（见 R30-10、R30-11、R30-12、R44-10），须按当地规定与裁判口径核实。本条为定性入口规则。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "定义条款明确，但具体项目是否计入基数各地存在口径差异",
+        "limitations": [
+          "各地对奖金/津贴/提成计入基数的口径不同"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-6",
+      "source": "《工资支付暂行规定》第六条",
+      "text": "用人单位应将工资支付给劳动者本人。劳动者本人因故不能领取工资时，可由其亲属或委托他人代领。用人单位可委托银行代发工资。用人单位必须书面记录支付劳动者工资的数额、时间、领取者的姓名以及签字，并保存两年以上备查。用人单位在支付工资时应向劳动者提供一份其个人的工资清单。",
+      "category": "obligation",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "OBLIGATION",
+        "bearer": "用人单位",
+        "act": "书面记录工资支付并保存两年以上、提供工资清单",
+        "symbol": "O(employer, WageRecord)"
+      },
+      "breach": {
+        "all": [
+          {
+            "fact": "wage_record_kept_2years",
+            "eq": true
+          },
+          {
+            "fact": "wage_list_provided",
+            "eq": true
+          }
+        ]
+      },
+      "remedy": "用人单位不能提供工资支付记录的，在工资数额争议中承担不利后果（举证责任倒置实务口径）；劳动者可向劳动监察投诉。",
+      "risk_note": "本条是工资争议举证的基础规则：工资发放记录由单位掌握并负有两年保存义务，单位不提供记录的，可结合银行流水、同岗位工资等推定劳动者主张的数额。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-7",
+      "source": "《工资支付暂行规定》第九条（离职时工资支付，各地规定细化）",
+      "text": "劳动关系双方依法解除或终止劳动合同时，用人单位应在解除或终止劳动合同时一次付清劳动者工资。",
+      "category": "obligation",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_terminated",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "OBLIGATION",
+        "bearer": "用人单位",
+        "act": "解除或终止劳动合同时一次性付清工资",
+        "symbol": "O(employer, FinalWageSettlement)"
+      },
+      "breach": {
+        "all": [
+          {
+            "fact": "final_wage_paid_in_full",
+            "eq": true
+          }
+        ]
+      },
+      "remedy": "未一次付清的构成拖欠，可依 R30/R85 主张；各地规定（如北京市工资支付规定允许双方另有约定支付日）优先适用。",
+      "risk_note": "各地对\"一次付清\"允许约定例外（如北京允许约定支付日），主张前须核实当地规定与双方约定；经济补偿的支付时点另受《劳动合同法》第五十条约束（办结工作交接时支付）。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "全国性规定明确，但\"一次付清\"的例外各地不同",
+        "limitations": [
+          "各地对约定支付日的例外规定不同"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-8",
+      "source": "《企业破产法》第一百一十三条",
+      "text": "破产财产在优先清偿破产费用和共益债务后，依照下列顺序清偿：（一）破产人所欠职工的工资和医疗、伤残补助、抚恤费用，所欠的应当划入职工个人账户的基本养老保险、基本医疗保险费用，以及法律、行政法规规定应当支付给职工的补偿金；（二）破产人欠缴的除前项规定以外的社会保险费用和破产人所欠税款；（三）普通破产债权。破产财产不足以清偿同一顺序的清偿要求的，按照比例分配。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employer_bankruptcy",
+            "eq": true
+          },
+          {
+            "fact": "wage_claim_in_bankruptcy",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "就工资债权在破产程序中主张第一顺位优先受偿",
+        "symbol": "P(worker, WagePriorityClaim)"
+      },
+      "remedy": "工资债权应列入第一顺位清偿；清偿不足的按比例分配。管理人违法清偿的，可请求纠正并追责。",
+      "risk_note": "破产企业董事、监事和高级管理人员的工资按该企业职工的平均工资计算（超额部分不作第一顺位）；本条仅适用于破产程序，非破产情形下的职工债权保护参照执行制度另行判断。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-9",
+      "source": "《劳动合同法》第八十五条（拖欠工资的加付赔偿金，部分地方规定细化）",
+      "text": "用人单位未按照劳动合同的约定或者国家规定及时足额支付劳动者劳动报酬的，由劳动行政部门责令限期支付；逾期不支付的，责令用人单位按应付金额百分之五十以上百分之一百以下的标准向劳动者加付赔偿金。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_delayed",
+            "eq": true
+          },
+          {
+            "fact": "authority_ordered_payment",
+            "eq": true
+          },
+          {
+            "fact": "order_not_complied",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张按应付金额50%-100%加付赔偿金",
+        "symbol": "P(worker, LatePaymentDamages)"
+      },
+      "remedy": "加付赔偿金以\"经责令限期支付而逾期未支付\"为前提，属于行政责令程序的后置后果；劳动者亦可直接申请仲裁追讨本金（见 R30）。",
+      "risk_note": "司法实践对未经行政责令程序、劳动者径行在仲裁中主张加付赔偿金的，普遍不予支持（需先经行政责令）；部分地方规定另有拖欠工资的利息/赔偿口径，须核实当地规定。全国层面无\"拖欠工资利息\"的一般规定。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "法条明确但加付赔偿金以行政责令为前提，各地受理口径不同",
+        "limitations": [
+          "未经行政责令程序径行主张的，各地支持程度不同"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-10",
+      "source": "《劳动法》第四十七条（年终奖争议，司法实践口径）",
+      "text": "年终奖属于用人单位依据劳动合同、规章制度或经营惯例发放的劳动报酬范畴。发放与否及数额，首先依双方约定或经民主程序制定并公示的规章制度确定；无约定且无制度规定的，参照同岗位惯例与既往发放情况认定。劳动者在年终奖考核发放前离职的，对已完成年度工作任务的，可按比例主张年终奖。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "year_end_bonus_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X30-10-1",
+          "source": "司法实践口径（约定/制度优先）",
+          "desc": "经民主程序制定并公示的规章制度或双方有效约定明确排除（如发放时在职要件），且不违反法律强制性规定",
+          "all": [
+            {
+              "fact": "bonus_excluded_by_valid_rules",
+              "eq": true
+            }
+          ]
+        }
+      ],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "按约定、制度或惯例主张年终奖（含离职按比例）",
+        "symbol": "P(worker, YearEndBonus)"
+      },
+      "remedy": "年终奖被拖欠的按劳动报酬追讨；基数认定影响经济补偿等计算（见 R30-5）。",
+      "risk_note": "年终奖是各地裁判分歧最大的项目之一：离职员工按比例主张（最高法院指导案例口径）与\"发放时在职\"要件效力认定存在地方差异；约定优先但不得以制度变相排除已付出的劳动对价。本规则采用保守策略（对劳动者有利）输出 POSSIBLE 待查而非径行判定。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "司法实践口径，各地裁判存在分歧",
+        "limitations": [
+          "离职年终奖按比例计算的支持度各地不同",
+          "需核实约定/制度的效力（民主程序+公示）"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-11",
+      "source": "《工资支付暂行规定》第三条（提成工资，司法实践口径）",
+      "text": "提成工资是以劳动者完成的工作量或业绩按比例计算的劳动报酬，属于工资的组成部分，纳入劳动报酬的各项保护（足额支付、克扣禁止、经济补偿基数等）。提成条件的成就（回款、签约等）由用人单位掌握证据的，用人单位不提供的承担不利后果。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "commission_wage_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张提成工资计入劳动报酬并受相应保护",
+        "symbol": "P(worker, CommissionWage)"
+      },
+      "remedy": "被拖欠的提成按劳动报酬追讨（R30 支付令、R85 加付赔偿金联动）。",
+      "risk_note": "提成计算依赖方案约定与业绩数据的举证：回款条件、离职后提成结算时点是常见争议，各地对\"离职后是否仍计提\"口径不一；规则对条件成就采用待查（POSSIBLE）而非径行判定。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "定义条款明确，结算时点各地口径不一",
+        "limitations": [
+          "离职后提成的结算规则需按方案与当地口径核实"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R30-12",
+      "source": "《防暑降温措施管理办法》第十七条",
+      "text": "用人单位安排劳动者在35℃以上高温天气从事室外露天作业以及不能采取有效措施将工作场所温度降低到33℃以下的，应当向劳动者发放高温津贴，并纳入工资总额。高温津贴不得以提供清凉饮料等实物替代。",
+      "category": "obligation",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "any": [
+              {
+                "fact": "outdoor_work_over_35c",
+                "eq": true
+              },
+              {
+                "fact": "indoor_temp_over_33c",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "OBLIGATION",
+        "bearer": "用人单位",
+        "act": "发放高温津贴并纳入工资总额",
+        "symbol": "O(employer, HeatAllowance)"
+      },
+      "breach": {
+        "all": [
+          {
+            "fact": "heat_allowance_paid",
+            "eq": true
+          }
+        ]
+      },
+      "remedy": "未发放的应补发；津贴纳入工资总额，未支付的属于未足额支付劳动报酬（R30/R85 联动）。",
+      "risk_note": "高温津贴的具体标准与发放月份由各省级规定确定（各地差异大）；正常出勤且提供劳动是发放前提，非高温岗位/临时户外作业的适用各地口径不同。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "部委规章明确发放情形，具体标准以地方规定为准",
+        "limitations": [
+          "津贴标准与发放月份按各地规定核实"
         ],
         "last_review": "2026-11-18",
         "reviewer": "WorkBuddy"

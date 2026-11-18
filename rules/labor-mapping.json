@@ -1764,6 +1764,453 @@
       "formula": "O(act_R82_3 | A_R82_3 & !E_R82_3)",
       "conditionAtom": "A_R82_3",
       "exceptionAtom": "E_R82_3"
+    },
+    {
+      "id": "R30-2",
+      "kind": "F",
+      "mappingVersion": "R30-2@2026-11-18.1",
+      "source": "《劳动法》第四十八条、第五十条（各地最低工资规定）",
+      "bearer": "用人单位",
+      "action": "支付低于当地最低工资标准的工资",
+      "actionAtom": "act_R30_2",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_below_minimum",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "not": {
+          "fact": "wage_below_minimum",
+          "eq": true
+        }
+      },
+      "violationOf": null,
+      "limits": [
+        "最低工资标准数额以案发时点当地省级规定为准",
+        "最低工资不含加班费与特殊环境津贴（各地口径）"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "wage_below_minimum"
+      ],
+      "formula": "O(!act_R30_2 | A_R30_2 & !E_R30_2)",
+      "conditionAtom": "A_R30_2",
+      "exceptionAtom": "E_R30_2"
+    },
+    {
+      "id": "R30-3",
+      "kind": "F",
+      "mappingVersion": "R30-3@2026-11-18.1",
+      "source": "《工资支付暂行规定》第十五条",
+      "bearer": "用人单位",
+      "action": "克扣劳动者工资",
+      "actionAtom": "act_R30_3",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_deducted",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X30-3-1",
+          "source": "《工资支付暂行规定》第十五条（法定代扣）",
+          "condition": {
+            "fact": "wage_deduction_lawful",
+            "eq": true
+          }
+        }
+      ],
+      "fulfillment": {
+        "not": {
+          "fact": "wage_deducted",
+          "eq": true
+        }
+      },
+      "violationOf": null,
+      "limits": [
+        "经济损失赔偿扣除受第十六条 20% 双限规则约束（R16-P）",
+        "法定代扣四情形为穷尽列举"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "wage_deducted",
+        "wage_deduction_lawful"
+      ],
+      "formula": "O(!act_R30_3 | A_R30_3 & !E_R30_3)",
+      "conditionAtom": "A_R30_3",
+      "exceptionAtom": "E_R30_3"
+    },
+    {
+      "id": "R30-4",
+      "kind": "O",
+      "mappingVersion": "R30-4@2026-11-18.1",
+      "source": "《工资支付暂行规定》第七条",
+      "bearer": "用人单位",
+      "action": "按约定日期至少每月一次支付工资",
+      "actionAtom": "act_R30_4",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_pay_interval_over_30_days",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "fact": "wage_paid_at_least_monthly",
+        "eq": true
+      },
+      "violationOf": null,
+      "limits": [
+        "非全日制用工结算周期上限为15日（R70 联动）",
+        "约定变更支付日的情形需排除"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "wage_pay_interval_over_30_days",
+        "wage_paid_at_least_monthly"
+      ],
+      "formula": "O(act_R30_4 | A_R30_4 & !E_R30_4)",
+      "conditionAtom": "A_R30_4",
+      "exceptionAtom": "E_R30_4"
+    },
+    {
+      "id": "R30-5",
+      "kind": "AUTH",
+      "mappingVersion": "R30-5@2026-11-18.1",
+      "source": "《工资支付暂行规定》第三条（工资组成认定，各地规定细化）",
+      "bearer": "劳动者",
+      "action": "主张争议款项计入劳动报酬",
+      "actionAtom": "act_R30_5",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "item_claimed_as_wage",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "各地对奖金/津贴/提成计入基数的口径不同",
+        "定性入口规则，基数计算另见 R44-10/R46-2"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "item_claimed_as_wage"
+      ],
+      "formula": "AUTH(act_R30_5 | A_R30_5 & !E_R30_5)",
+      "conditionAtom": "A_R30_5",
+      "exceptionAtom": "E_R30_5"
+    },
+    {
+      "id": "R30-6",
+      "kind": "O",
+      "mappingVersion": "R30-6@2026-11-18.1",
+      "source": "《工资支付暂行规定》第六条",
+      "bearer": "用人单位",
+      "action": "书面记录工资支付并保存两年以上、提供工资清单",
+      "actionAtom": "act_R30_6",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "all": [
+          {
+            "fact": "wage_record_kept_2years",
+            "eq": true
+          },
+          {
+            "fact": "wage_list_provided",
+            "eq": true
+          }
+        ]
+      },
+      "violationOf": null,
+      "limits": [
+        "举证不利后果为实务口径而非法定明文"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "wage_record_kept_2years",
+        "wage_list_provided"
+      ],
+      "formula": "O(act_R30_6 | A_R30_6 & !E_R30_6)",
+      "conditionAtom": "A_R30_6",
+      "exceptionAtom": "E_R30_6"
+    },
+    {
+      "id": "R30-7",
+      "kind": "O",
+      "mappingVersion": "R30-7@2026-11-18.1",
+      "source": "《工资支付暂行规定》第九条（离职时工资支付，各地规定细化）",
+      "bearer": "用人单位",
+      "action": "解除或终止劳动合同时一次性付清工资",
+      "actionAtom": "act_R30_7",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_terminated",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "fact": "final_wage_paid_in_full",
+        "eq": true
+      },
+      "violationOf": null,
+      "limits": [
+        "各地对约定支付日的例外规定不同（如北京）",
+        "经济补偿支付时点另见 R50"
+      ],
+      "factKeys": [
+        "employment_terminated",
+        "final_wage_paid_in_full"
+      ],
+      "formula": "O(act_R30_7 | A_R30_7 & !E_R30_7)",
+      "conditionAtom": "A_R30_7",
+      "exceptionAtom": "E_R30_7"
+    },
+    {
+      "id": "R30-8",
+      "kind": "AUTH",
+      "mappingVersion": "R30-8@2026-11-18.1",
+      "source": "《企业破产法》第一百一十三条",
+      "bearer": "劳动者",
+      "action": "就工资债权主张第一顺位优先受偿",
+      "actionAtom": "act_R30_8",
+      "condition": {
+        "all": [
+          {
+            "fact": "employer_bankruptcy",
+            "eq": true
+          },
+          {
+            "fact": "wage_claim_in_bankruptcy",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "高管工资按职工平均工资计算（超额部分不作第一顺位）",
+        "仅适用于破产程序"
+      ],
+      "factKeys": [
+        "employer_bankruptcy",
+        "wage_claim_in_bankruptcy"
+      ],
+      "formula": "AUTH(act_R30_8 | A_R30_8 & !E_R30_8)",
+      "conditionAtom": "A_R30_8",
+      "exceptionAtom": "E_R30_8"
+    },
+    {
+      "id": "R30-9",
+      "kind": "AUTH",
+      "mappingVersion": "R30-9@2026-11-18.1",
+      "source": "《劳动合同法》第八十五条（拖欠工资的加付赔偿金）",
+      "bearer": "劳动者",
+      "action": "主张按应付金额50%-100%加付赔偿金",
+      "actionAtom": "act_R30_9",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "wage_delayed",
+            "eq": true
+          },
+          {
+            "fact": "authority_ordered_payment",
+            "eq": true
+          },
+          {
+            "fact": "order_not_complied",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "以行政责令程序为前置，未经责令径行主张的各地支持程度不同",
+        "全国层面无拖欠工资利息的一般规定"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "wage_delayed",
+        "authority_ordered_payment",
+        "order_not_complied"
+      ],
+      "formula": "AUTH(act_R30_9 | A_R30_9 & !E_R30_9)",
+      "conditionAtom": "A_R30_9",
+      "exceptionAtom": "E_R30_9"
+    },
+    {
+      "id": "R30-10",
+      "kind": "AUTH",
+      "mappingVersion": "R30-10@2026-11-18.1",
+      "source": "《劳动法》第四十七条（年终奖争议，司法实践口径）",
+      "bearer": "劳动者",
+      "action": "按约定、制度或惯例主张年终奖",
+      "actionAtom": "act_R30_10",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "year_end_bonus_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X30-10-1",
+          "source": "司法实践口径（约定/制度优先）",
+          "condition": {
+            "fact": "bonus_excluded_by_valid_rules",
+            "eq": true
+          }
+        }
+      ],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "离职年终奖按比例计算的支持度各地不同",
+        "约定/制度效力需核实民主程序+公示"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "year_end_bonus_claimed",
+        "bonus_excluded_by_valid_rules"
+      ],
+      "formula": "AUTH(act_R30_10 | A_R30_10 & !E_R30_10)",
+      "conditionAtom": "A_R30_10",
+      "exceptionAtom": "E_R30_10"
+    },
+    {
+      "id": "R30-11",
+      "kind": "AUTH",
+      "mappingVersion": "R30-11@2026-11-18.1",
+      "source": "《工资支付暂行规定》第三条（提成工资，司法实践口径）",
+      "bearer": "劳动者",
+      "action": "主张提成工资计入劳动报酬",
+      "actionAtom": "act_R30_11",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "commission_wage_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "提成条件成就与结算时点依赖方案约定与举证，各地口径不一"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "commission_wage_claimed"
+      ],
+      "formula": "AUTH(act_R30_11 | A_R30_11 & !E_R30_11)",
+      "conditionAtom": "A_R30_11",
+      "exceptionAtom": "E_R30_11"
+    },
+    {
+      "id": "R30-12",
+      "kind": "O",
+      "mappingVersion": "R30-12@2026-11-18.1",
+      "source": "《防暑降温措施管理办法》第十七条",
+      "bearer": "用人单位",
+      "action": "发放高温津贴并纳入工资总额",
+      "actionAtom": "act_R30_12",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "any": [
+              {
+                "fact": "outdoor_work_over_35c",
+                "eq": true
+              },
+              {
+                "fact": "indoor_temp_over_33c",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "fact": "heat_allowance_paid",
+        "eq": true
+      },
+      "violationOf": null,
+      "limits": [
+        "津贴标准与发放月份按各地规定核实",
+        "不得以实物替代（办法第11条）"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "outdoor_work_over_35c",
+        "indoor_temp_over_33c",
+        "heat_allowance_paid"
+      ],
+      "formula": "O(act_R30_12 | A_R30_12 & !E_R30_12)",
+      "conditionAtom": "A_R30_12",
+      "exceptionAtom": "E_R30_12"
     }
   ],
   "priorityBases": [
