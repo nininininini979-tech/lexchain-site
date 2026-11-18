@@ -2211,6 +2211,462 @@
       "formula": "O(act_R30_12 | A_R30_12 & !E_R30_12)",
       "conditionAtom": "A_R30_12",
       "exceptionAtom": "E_R30_12"
+    },
+    {
+      "id": "R44-2",
+      "kind": "F",
+      "mappingVersion": "R44-2@2026-11-18.1",
+      "source": "《劳动法》第三十六条",
+      "bearer": "用人单位",
+      "action": "安排超过标准工时的工作",
+      "actionAtom": "act_R44_2",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "standard_hours_system",
+            "eq": true
+          },
+          {
+            "fact": "overtime_beyond_statutory_hours",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "not": {
+          "fact": "overtime_beyond_statutory_hours",
+          "eq": true
+        }
+      },
+      "violationOf": null,
+      "limits": [
+        "综合/不定时工时须经审批方可适用",
+        "计件用工超定额部分按加班认定"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "standard_hours_system",
+        "overtime_beyond_statutory_hours"
+      ],
+      "formula": "O(!act_R44_2 | A_R44_2 & !E_R44_2)",
+      "conditionAtom": "A_R44_2",
+      "exceptionAtom": "E_R44_2"
+    },
+    {
+      "id": "R44-3",
+      "kind": "F",
+      "mappingVersion": "R44-3@2026-11-18.1",
+      "source": "《劳动法》第三十九条（综合计算工时工作制）",
+      "bearer": "用人单位",
+      "action": "综合计算周期内实际总工时超过总法定工时",
+      "actionAtom": "act_R44_3",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "comprehensive_hours_system",
+            "eq": true
+          },
+          {
+            "fact": "comprehensive_period_exceeded",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "not": {
+          "fact": "comprehensive_period_exceeded",
+          "eq": true
+        }
+      },
+      "violationOf": null,
+      "limits": [
+        "未经审批仍按标准工时认定",
+        "超出部分一律150%，法定节假日300%例外"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "comprehensive_hours_system",
+        "comprehensive_period_exceeded"
+      ],
+      "formula": "O(!act_R44_3 | A_R44_3 & !E_R44_3)",
+      "conditionAtom": "A_R44_3",
+      "exceptionAtom": "E_R44_3"
+    },
+    {
+      "id": "R44-4",
+      "kind": "AUTH",
+      "mappingVersion": "R44-4@2026-11-18.1",
+      "source": "《劳动法》第三十九条（不定时工作制）",
+      "bearer": "用人单位",
+      "action": "经批准的不定时岗位不执行标准加班费规定",
+      "actionAtom": "act_R44_4",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "flexible_hours_system",
+            "eq": true
+          },
+          {
+            "fact": "flexible_hours_approved",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "法定节假日加班费适用性各地口径不同",
+        "未经审批不产生免责效果"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "flexible_hours_system",
+        "flexible_hours_approved"
+      ],
+      "formula": "AUTH(act_R44_4 | A_R44_4 & !E_R44_4)",
+      "conditionAtom": "A_R44_4",
+      "exceptionAtom": "E_R44_4"
+    },
+    {
+      "id": "R44-5",
+      "kind": "AUTH",
+      "mappingVersion": "R44-5@2026-11-18.1",
+      "source": "《劳动合同法》第三十一条（加班审批要求，各地口径）",
+      "bearer": "劳动者",
+      "action": "主张未经审批但实际安排的加班按加班认定",
+      "actionAtom": "act_R44_5",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "overtime_claimed",
+            "eq": true
+          },
+          {
+            "fact": "no_overtime_approval",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "各地对审批制与事实认定的权衡分歧较大",
+        "完全自愿延时且单位不知情的情形各地可能不认定"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "overtime_claimed",
+        "no_overtime_approval"
+      ],
+      "formula": "AUTH(act_R44_5 | A_R44_5 & !E_R44_5)",
+      "conditionAtom": "A_R44_5",
+      "exceptionAtom": "E_R44_5"
+    },
+    {
+      "id": "R44-6",
+      "kind": "AUTH",
+      "mappingVersion": "R44-6@2026-11-18.1",
+      "source": "《最高人民法院关于审理劳动争议案件适用法律问题的解释（一）》第四十二条",
+      "bearer": "劳动者",
+      "action": "在单位掌握加班证据不提供时主张不利推定",
+      "actionAtom": "act_R44_6",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "overtime_claimed",
+            "eq": true
+          },
+          {
+            "fact": "employer_holds_overtime_records",
+            "eq": true
+          },
+          {
+            "fact": "records_not_provided",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "劳动者仍需完成初步举证"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "overtime_claimed",
+        "employer_holds_overtime_records",
+        "records_not_provided"
+      ],
+      "formula": "AUTH(act_R44_6 | A_R44_6 & !E_R44_6)",
+      "conditionAtom": "A_R44_6",
+      "exceptionAtom": "E_R44_6"
+    },
+    {
+      "id": "R44-7",
+      "kind": "F",
+      "mappingVersion": "R44-7@2026-11-18.1",
+      "source": "《劳动法》第四十一条",
+      "bearer": "用人单位",
+      "action": "延长工作时间超过法定上限",
+      "actionAtom": "act_R44_7",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "daily_overtime_over_3h",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X44-7-1",
+          "source": "《劳动法》第四十二条（紧急情形不受限制）",
+          "condition": {
+            "fact": "emergency_or_urgent_repair",
+            "eq": true
+          }
+        }
+      ],
+      "fulfillment": {
+        "not": {
+          "fact": "daily_overtime_over_3h",
+          "eq": true
+        }
+      },
+      "violationOf": null,
+      "limits": [
+        "每日1h一般上限/3h特殊上限/36h月度硬上限",
+        "与 R31 联动"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "daily_overtime_over_3h",
+        "emergency_or_urgent_repair"
+      ],
+      "formula": "O(!act_R44_7 | A_R44_7 & !E_R44_7)",
+      "conditionAtom": "A_R44_7",
+      "exceptionAtom": "E_R44_7"
+    },
+    {
+      "id": "R44-8",
+      "kind": "AUTH",
+      "mappingVersion": "R44-8@2026-11-18.1",
+      "source": "《劳动法》第四十四条（值班与加班的界分，司法实践口径）",
+      "bearer": "劳动者",
+      "action": "主张值班名义下的实质性工作按加班认定",
+      "actionAtom": "act_R44_8",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "duty_shift_claimed_as_overtime",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "核心标准是是否从事生产性实质性劳动，各地口径分歧"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "duty_shift_claimed_as_overtime"
+      ],
+      "formula": "AUTH(act_R44_8 | A_R44_8 & !E_R44_8)",
+      "conditionAtom": "A_R44_8",
+      "exceptionAtom": "E_R44_8"
+    },
+    {
+      "id": "R44-9",
+      "kind": "O",
+      "mappingVersion": "R44-9@2026-11-18.1",
+      "source": "《劳动法》第四十四条",
+      "bearer": "用人单位",
+      "action": "休息日加班未补休时支付不低于200%报酬",
+      "actionAtom": "act_R44_9",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "rest_day_worked",
+            "eq": true
+          },
+          {
+            "fact": "no_compensatory_rest",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": {
+        "fact": "overtime_200pct_paid",
+        "eq": true
+      },
+      "violationOf": null,
+      "limits": [
+        "法定节假日300%不得以补休替代",
+        "补休合理周期各地口径不同"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "rest_day_worked",
+        "no_compensatory_rest",
+        "overtime_200pct_paid"
+      ],
+      "formula": "O(act_R44_9 | A_R44_9 & !E_R44_9)",
+      "conditionAtom": "A_R44_9",
+      "exceptionAtom": "E_R44_9"
+    },
+    {
+      "id": "R44-10",
+      "kind": "AUTH",
+      "mappingVersion": "R44-10@2026-11-18.1",
+      "source": "《劳动法》第四十四条（加班基数认定，各地口径）",
+      "bearer": "劳动者",
+      "action": "主张以约定工资（含常规性报酬）为加班费基数",
+      "actionAtom": "act_R44_10",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "overtime_hours_worked",
+            "eq": true
+          },
+          {
+            "fact": "overtime_base_disputed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "基数构成各地口径差异最大（沪/粤/京不同）",
+        "日工资折算按21.75天全国统一"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "overtime_hours_worked",
+        "overtime_base_disputed"
+      ],
+      "formula": "AUTH(act_R44_10 | A_R44_10 & !E_R44_10)",
+      "conditionAtom": "A_R44_10",
+      "exceptionAtom": "E_R44_10"
+    },
+    {
+      "id": "R44-11",
+      "kind": "AUTH",
+      "mappingVersion": "R44-11@2026-11-18.1",
+      "source": "《劳动法》第三十九条（特殊行业工时）",
+      "bearer": "用人单位",
+      "action": "经批准的特殊行业岗位实行其他工时办法",
+      "actionAtom": "act_R44_11",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "special_industry_schedule",
+            "eq": true
+          },
+          {
+            "fact": "flexible_hours_approved",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "超出批准范围（岗位/人数/周期）的适用无效"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "special_industry_schedule",
+        "flexible_hours_approved"
+      ],
+      "formula": "AUTH(act_R44_11 | A_R44_11 & !E_R44_11)",
+      "conditionAtom": "A_R44_11",
+      "exceptionAtom": "E_R44_11"
+    },
+    {
+      "id": "R44-12",
+      "kind": "AUTH",
+      "mappingVersion": "R44-12@2026-11-18.1",
+      "source": "《劳动法》第四十四条（隐性加班认定，司法实践口径）",
+      "bearer": "劳动者",
+      "action": "主张下班后线上办公的隐性加班",
+      "actionAtom": "act_R44_12",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "offline_overtime_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "实质性劳动+明显占用休息时间+周期性固定性三要件",
+        "各地适用程度不一，尚未全国统一"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "offline_overtime_claimed"
+      ],
+      "formula": "AUTH(act_R44_12 | A_R44_12 & !E_R44_12)",
+      "conditionAtom": "A_R44_12",
+      "exceptionAtom": "E_R44_12"
     }
   ],
   "priorityBases": [
