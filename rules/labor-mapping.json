@@ -2667,6 +2667,355 @@
       "formula": "AUTH(act_R44_12 | A_R44_12 & !E_R44_12)",
       "conditionAtom": "A_R44_12",
       "exceptionAtom": "E_R44_12"
+    },
+    {
+      "id": "R46-2",
+      "kind": "AUTH",
+      "mappingVersion": "R46-2@2026-11-18.1",
+      "source": "《劳动合同法》第四十七条第三款",
+      "bearer": "劳动者",
+      "action": "主张按前12个月平均工资为经济补偿基数",
+      "actionAtom": "act_R46_2",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "base_wage_disputed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "平均工资构成（年终奖/加班费）各地口径不一"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "compensation_claimed",
+        "base_wage_disputed"
+      ],
+      "formula": "AUTH(act_R46_2 | A_R46_2 & !E_R46_2)",
+      "conditionAtom": "A_R46_2",
+      "exceptionAtom": "E_R46_2"
+    },
+    {
+      "id": "R46-3",
+      "kind": "AUTH",
+      "mappingVersion": "R46-3@2026-11-18.1",
+      "source": "《劳动合同法》第四十七条第二款",
+      "bearer": "劳动者",
+      "action": "高收入情形主张三倍封顶基数与12年上限的适用",
+      "actionAtom": "act_R46_3",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "wage_exceeds_3x_avg",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "双限联动适用：基数封顶触发时年限才封顶"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "compensation_claimed",
+        "wage_exceeds_3x_avg"
+      ],
+      "formula": "AUTH(act_R46_3 | A_R46_3 & !E_R46_3)",
+      "conditionAtom": "A_R46_3",
+      "exceptionAtom": "E_R46_3"
+    },
+    {
+      "id": "R46-4",
+      "kind": "AUTH",
+      "mappingVersion": "R46-4@2026-11-18.1",
+      "source": "《劳动合同法》第四十七条第一款",
+      "bearer": "劳动者",
+      "action": "主张按实际用工年限折算补偿月数",
+      "actionAtom": "act_R46_4",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "service_length_disputed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "中断后再入职的年限连续性地方口径不同"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "compensation_claimed",
+        "service_length_disputed"
+      ],
+      "formula": "AUTH(act_R46_4 | A_R46_4 & !E_R46_4)",
+      "conditionAtom": "A_R46_4",
+      "exceptionAtom": "E_R46_4"
+    },
+    {
+      "id": "R40-2",
+      "kind": "AUTH",
+      "mappingVersion": "R40-2@2026-11-18.1",
+      "source": "《劳动合同法》第四十条（代通知金）",
+      "bearer": "劳动者",
+      "action": "主张未提前30日通知的额外一个月工资",
+      "actionAtom": "act_R40_2",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "dismissal_under_40",
+            "eq": true
+          },
+          {
+            "fact": "no_30day_notice",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X40-2-1",
+          "source": "《劳动合同法》第四十条（已提前通知/已付代通知金）",
+          "condition": {
+            "fact": "extra_month_wage_paid",
+            "eq": true
+          }
+        }
+      ],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "仅适用于40条无过失辞退",
+        "代通知金按上月工资，与 N 并行"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "dismissal_under_40",
+        "no_30day_notice",
+        "extra_month_wage_paid"
+      ],
+      "formula": "AUTH(act_R40_2 | A_R40_2 & !E_R40_2)",
+      "conditionAtom": "A_R40_2",
+      "exceptionAtom": "E_R40_2"
+    },
+    {
+      "id": "R87-2-detail",
+      "kind": "AUTH",
+      "mappingVersion": "R87-2-detail@2026-11-18.1",
+      "source": "《劳动合同法》第八十七条（赔偿金与经济补偿的关系）",
+      "bearer": "劳动者",
+      "action": "在继续履行与2N赔偿金之间择一主张",
+      "actionAtom": "act_R87_2_detail",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "unlawful_termination",
+            "eq": true
+          },
+          {
+            "fact": "double_compensation_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "2N 涵盖 N 不另付（全国口径一致）"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "unlawful_termination",
+        "double_compensation_claimed"
+      ],
+      "formula": "AUTH(act_R87_2_detail | A_R87_2_detail & !E_R87_2_detail)",
+      "conditionAtom": "A_R87_2_detail",
+      "exceptionAtom": "E_R87_2_detail"
+    },
+    {
+      "id": "R46-5",
+      "kind": "AUTH",
+      "mappingVersion": "R46-5@2026-11-18.1",
+      "source": "《劳动合同法》第四十六条第二项",
+      "bearer": "劳动者",
+      "action": "在单位提出的协商解除中主张经济补偿",
+      "actionAtom": "act_R46_5",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "mutual_termination_proposed_by_employer",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "提出方举证与协议效力各地口径有差异"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "compensation_claimed",
+        "mutual_termination_proposed_by_employer"
+      ],
+      "formula": "AUTH(act_R46_5 | A_R46_5 & !E_R46_5)",
+      "conditionAtom": "A_R46_5",
+      "exceptionAtom": "E_R46_5"
+    },
+    {
+      "id": "R46-6",
+      "kind": "AUTH",
+      "mappingVersion": "R46-6@2026-11-18.1",
+      "source": "《劳动合同法》第四十六条第五项",
+      "bearer": "劳动者",
+      "action": "期满终止时主张经济补偿",
+      "actionAtom": "act_R46_6",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "contract_expired_terminated",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X46-6-1",
+          "source": "《劳动合同法》第四十六条第五项但书",
+          "condition": {
+            "all": [
+              {
+                "fact": "employer_offered_renewal_same_terms",
+                "eq": true
+              },
+              {
+                "fact": "worker_refused_renewal",
+                "eq": true
+              }
+            ]
+          }
+        }
+      ],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "单位降条件续订遭拒的仍应支付"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "contract_expired_terminated",
+        "compensation_claimed",
+        "employer_offered_renewal_same_terms",
+        "worker_refused_renewal"
+      ],
+      "formula": "AUTH(act_R46_6 | A_R46_6 & !E_R46_6)",
+      "conditionAtom": "A_R46_6",
+      "exceptionAtom": "E_R46_6"
+    },
+    {
+      "id": "R46-7",
+      "kind": "AUTH",
+      "mappingVersion": "R46-7@2026-11-18.1",
+      "source": "《劳动合同法》第四十七条（普通收入年限不封顶）",
+      "bearer": "劳动者",
+      "action": "主张普通收入按实际年限全额计算经济补偿",
+      "actionAtom": "act_R46_7",
+      "condition": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "service_years_over_12",
+            "eq": true
+          },
+          {
+            "not": {
+              "fact": "wage_exceeds_3x_avg",
+              "eq": true
+            }
+          }
+        ]
+      },
+      "exceptions": [],
+      "fulfillment": null,
+      "violationOf": null,
+      "limits": [
+        "双限联动：基数不封顶则年限不封顶"
+      ],
+      "factKeys": [
+        "employment_exists",
+        "compensation_claimed",
+        "service_years_over_12",
+        "wage_exceeds_3x_avg"
+      ],
+      "formula": "AUTH(act_R46_7 | A_R46_7 & !E_R46_7)",
+      "conditionAtom": "A_R46_7",
+      "exceptionAtom": "E_R46_7"
     }
   ],
   "priorityBases": [

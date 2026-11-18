@@ -901,6 +901,104 @@
       "type": "bool",
       "group": "工时制度",
       "nature": "LEGAL_CLASSIFICATION"
+    },
+    {
+      "key": "compensation_claimed",
+      "label": "劳动者主张经济补偿",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "base_wage_disputed",
+      "label": "经济补偿计算基数存在争议",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "wage_exceeds_3x_avg",
+      "label": "月工资超过当地上年度职工月平均工资三倍",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "service_length_disputed",
+      "label": "工作年限折算存在争议（跨年月/入离职时点）",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "service_years_over_12",
+      "label": "工作年限超过十二年",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "dismissal_under_40",
+      "label": "用人单位依第四十条（无过失辞退）解除劳动合同",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "no_30day_notice",
+      "label": "未提前三十日以书面形式通知劳动者本人",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "extra_month_wage_paid",
+      "label": "已额外支付一个月工资（代通知金）",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "unlawful_termination",
+      "label": "用人单位被认定违法解除或终止劳动合同",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "double_compensation_claimed",
+      "label": "劳动者主张二倍经济补偿的赔偿金",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "mutual_termination_proposed_by_employer",
+      "label": "协商一致解除由用人单位提出",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "contract_expired_terminated",
+      "label": "劳动合同期满终止（固定期限合同）",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "employer_offered_renewal_same_terms",
+      "label": "用人单位维持或提高劳动合同约定条件续订劳动合同",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
+    },
+    {
+      "key": "worker_refused_renewal",
+      "label": "劳动者不同意续订劳动合同",
+      "type": "bool",
+      "group": "经济补偿",
+      "nature": "OBSERVATION"
     }
   ],
   "rules": [
@@ -3563,6 +3661,352 @@
           "各地适用程度不一",
           "需聊天记录等初步举证支持"
         ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-2",
+      "source": "《劳动合同法》第四十七条第三款",
+      "text": "本条所称月工资是指劳动者在劳动合同解除或者终止前十二个月的平均工资。计算基数包含计时工资、计件工资、奖金、津贴和补贴等货币性收入；月工资低于当地最低工资标准的，按当地最低工资标准计算。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "base_wage_disputed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张按解除或终止前12个月平均工资（含货币性收入）为经济补偿基数",
+        "symbol": "P(worker, CompBaseAvg12)"
+      },
+      "remedy": "基数确定后按 R46/R46-4 的年限规则计算金额；实得工资与应发工资的差额部分（已扣未付）应计入。",
+      "risk_note": "前12个月平均工资是否包含年终奖、加班费各地口径不一（多数地区计入应得工资）；应得工资（税前、含扣款部分）为通说口径，实发工资口径为少数。自动计算见 integration/amounts.js calculateCompensation。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "法条明确，但平均工资的构成各地口径不一",
+        "limitations": [
+          "年终奖/加班费是否计入按当地口径核实"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-3",
+      "source": "《劳动合同法》第四十七条第二款",
+      "text": "劳动者月工资高于用人单位所在直辖市、设区的市级人民政府公布的本地区上年度职工月平均工资三倍的，向其支付经济补偿的标准按职工月平均工资三倍的数额支付，向其支付经济补偿的年限最高不超过十二年。基数封顶与年限封顶同时适用，仅针对月工资超过三倍的高收入劳动者。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "wage_exceeds_3x_avg",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "在高收入情形主张按三倍平均工资为基数、12年为限计算经济补偿",
+        "symbol": "P(worker, HighIncomeCap)"
+      },
+      "remedy": "高收入者的经济补偿 = 当地月平均工资 × 3 × min(折算年限, 12)；自动计算见 calculateCompensation（capped 字段标识封顶触发）。",
+      "risk_note": "双限规则仅适用于月工资超过三倍平均工资的情形——未超过三倍的普通收入劳动者即使工作超过12年，年限也不封顶（见 R46-7）。\"上年度职工月平均工资\"以直辖市/设区的市级政府公布口径为准。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-4",
+      "source": "《劳动合同法》第四十七条第一款",
+      "text": "经济补偿按劳动者在本单位工作的年限，每满一年支付一个月工资的标准向劳动者支付。六个月以上不满一年的，按一年计算；不满六个月的，向劳动者支付半个月工资的经济补偿。工作年限自实际用工之日起连续计算，非因劳动者原因变动用人单位主体的年限连续计算。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "service_length_disputed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张按实际用工年限折算经济补偿月数（满年按月、6个月以上按年、不满6个月半月）",
+        "symbol": "P(worker, ServiceYearsProration)"
+      },
+      "remedy": "月数折算边界示例：工作5年8个月→6个月；5年6个月整→6个月；5年4个月→5.5个月。自动计算见 calculateCompensation 的 N 字段。",
+      "risk_note": "年限连续计算的典型情形：关联企业间调动、合并分立承继（《劳动合同法》第33/34条）；劳动者主动辞职中断后再入职的年限是否连续存在地方差异。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [
+          "中断后再入职的年限连续性地方口径不同"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R40-2",
+      "source": "《劳动合同法》第四十条（代通知金，N+1 中的 +1）",
+      "text": "用人单位依第四十条解除劳动合同（医疗期满、不胜任、客观情况重大变化），未提前三十日以书面形式通知劳动者本人的，应当额外支付劳动者一个月工资。额外支付的月工资按照劳动者上一个月的工资标准确定（实施条例第二十条）。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "dismissal_under_40",
+            "eq": true
+          },
+          {
+            "fact": "no_30day_notice",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X40-2-1",
+          "source": "《劳动合同法》第四十条（已提前通知）",
+          "desc": "用人单位已提前三十日以书面形式通知劳动者本人，则无代通知金",
+          "all": [
+            {
+              "fact": "extra_month_wage_paid",
+              "eq": true
+            }
+          ]
+        }
+      ],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张未提前30日通知情形下额外支付一个月工资（代通知金）",
+        "symbol": "P(worker, PaymentInLieu)"
+      },
+      "remedy": "代通知金按上月工资标准（非12个月平均），与经济补偿 N 并行计算，合称 N+1。",
+      "risk_note": "代通知金仅适用于第四十条三种情形的无过失辞退，不适用于协商解除、38条被迫解除、经济性裁员等；选择提前30日通知的没有代通知金——二选一。上月工资标准是通说（实施条例第20条），个别地区口径不同。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条+实施条例明确",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R87-2-detail",
+      "source": "《劳动合同法》第八十七条（赔偿金与经济补偿的关系）",
+      "text": "用人单位违法解除或终止劳动合同的，按经济补偿标准的二倍支付赔偿金（2N）。赔偿金与经济补偿不可同时主张：劳动者选择继续履行劳动合同的，不支付赔偿金；不能继续履行或劳动者不要求继续履行的，支付赔偿金后不再另行支付经济补偿。合法解除情形下仅支付经济补偿（N）。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "unlawful_termination",
+            "eq": true
+          },
+          {
+            "fact": "double_compensation_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "在继续履行与二倍赔偿金（2N）之间择一主张",
+        "symbol": "P(worker, ChoiceBetween2NAndReinstatement)"
+      },
+      "remedy": "2N 按经济补偿标准二倍计算，自动计算见 calculateStatutoryDamages；主张继续履行的，仲裁支持后赔偿金与经济补偿均不再支付。",
+      "risk_note": "N 与 2N 的界分取决于解除行为合法与否的定性（R38-R42/R45/R87 各规则的联动）；实践中\"2N 是否涵盖 N\"全国口径一致（涵盖，不另付），劳动者主张时勿重复计算。三期、医疗期等特殊保护期违法解除可主张至三期期满的工资损失（各地口径）。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确，N/2N 不可兼得口径全国一致",
+        "limitations": [],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-5",
+      "source": "《劳动合同法》第四十六条第二项",
+      "text": "用人单位依照第三十六条规定向劳动者提出解除劳动合同并与劳动者协商一致解除劳动合同的，用人单位应当向劳动者支付经济补偿。劳动者主动提出协商解除的，用人单位无须支付经济补偿。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "mutual_termination_proposed_by_employer",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "在单位提出的协商解除中主张经济补偿",
+        "symbol": "P(worker, MutualTermByEmployer)"
+      },
+      "remedy": "按工作年限与 R46-2/R46-4 确定的基数与年限计算经济补偿 N。",
+      "risk_note": "\"谁提出\"是协商解除补偿的关键争点：解除协议未写明提出方的，举证责任实务上倾向由单位证明系劳动者提出；协议中\"双方协商一致解除\"且未约定补偿的，各地对视为单位提出的口径不同。协议明确放弃补偿且不违反强制性规定的，原则有效。",
+      "confidence": {
+        "level": "MEDIUM",
+        "basis": "法条明确，但提出方举证与协议效力各地口径有差异",
+        "limitations": [
+          "协议未写明提出方时的举证分配各地不同"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-6",
+      "source": "《劳动合同法》第四十六条第五项",
+      "text": "除用人单位维持或者提高劳动合同约定条件续订劳动合同，劳动者不同意续订的情形外，依照第四十四条第一项规定终止固定期限劳动合同的，用人单位应当向劳动者支付经济补偿。即：期满终止原则上支付经济补偿，单位维持或提高条件续订而劳动者不同意的除外。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "contract_expired_terminated",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          }
+        ]
+      },
+      "exceptions": [
+        {
+          "id": "X46-6-1",
+          "source": "《劳动合同法》第四十六条第五项但书",
+          "desc": "用人单位维持或提高劳动合同约定条件续订劳动合同，劳动者不同意续订的，期满终止不支付经济补偿",
+          "all": [
+            {
+              "fact": "employer_offered_renewal_same_terms",
+              "eq": true
+            },
+            {
+              "fact": "worker_refused_renewal",
+              "eq": true
+            }
+          ]
+        }
+      ],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "在期满终止时主张经济补偿（单位降条件续订或不续订情形）",
+        "symbol": "P(worker, ExpiryCompensation)"
+      },
+      "remedy": "按年限与基数计算经济补偿 N；单位降低条件续订遭拒的仍应支付（但书不适用）。",
+      "risk_note": "但书仅在\"维持或提高条件+劳动者不同意\"同时成立时适用：单位降低条件续订遭拒的仍须支付；\"维持条件\"是否包含岗位地点变更各地口径不一（一般按原合同全部约定条件对比）。单位不续订（无论理由）的应支付。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确",
+        "limitations": [
+          "续订条件是否实质\"维持\"的对比口径各地略有差异"
+        ],
+        "last_review": "2026-11-18",
+        "reviewer": "WorkBuddy"
+      }
+    },
+    {
+      "id": "R46-7",
+      "source": "《劳动合同法》第四十七条（普通收入者的年限不封顶）",
+      "text": "经济补偿年限最高不超过十二年的限制，仅适用于月工资超过当地上年度职工月平均工资三倍的高收入劳动者。月工资未超过三倍的劳动者，即使工作年限超过十二年，经济补偿仍按实际年限全额计算，不受十二年限制；其计算基数也不作三倍封顶。",
+      "category": "permission",
+      "trigger": {
+        "all": [
+          {
+            "fact": "employment_exists",
+            "eq": true
+          },
+          {
+            "fact": "compensation_claimed",
+            "eq": true
+          },
+          {
+            "fact": "service_years_over_12",
+            "eq": true
+          },
+          {
+            "not": {
+              "fact": "wage_exceeds_3x_avg",
+              "eq": true
+            }
+          }
+        ]
+      },
+      "exceptions": [],
+      "deontic": {
+        "operator": "PERMISSION",
+        "bearer": "劳动者",
+        "act": "主张普通收入情形下按实际年限全额计算经济补偿（不受12年封顶）",
+        "symbol": "P(worker, NoCapForNormalIncome)"
+      },
+      "remedy": "经济补偿 = 月平均工资 × 实际折算年限（无上限）；自动计算见 calculateCompensation（capped.years 为 false）。",
+      "risk_note": "本条是对 47条第2款双限适用范围的确认——双限（三倍基数+12年）是联动适用的：基数封顶触发时年限才封顶；普通收入两者均不适用。工作20年的普通劳动者按20个月计算。",
+      "confidence": {
+        "level": "HIGH",
+        "basis": "法条明确（第2款适用范围的文义与通说一致）",
+        "limitations": [],
         "last_review": "2026-11-18",
         "reviewer": "WorkBuddy"
       }
