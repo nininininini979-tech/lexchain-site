@@ -52,7 +52,7 @@ function validate(input,assets){
 
  if(maps.length!==ids.length||new Set(maps.map(m=>m.id)).size!==ids.length||maps.some(m=>!ids.includes(m.id)))throw new Error('映射必须逐条覆盖且不能重复');
  const defs=Object.fromEntries(assets.rules.facts.map(f=>[f.key,f]));
- for(const m of maps){for(const c of [m.condition,...m.exceptions.map(e=>e.condition),...(m.fulfillment?[m.fulfillment]:[])]){const errs=E.validateCondition(c,defs);if(errs.length)throw new Error(errs.join(';'));}if(!['O','F','AUTH'].includes(m.kind))throw new Error('规范类型无效');}
+ for(const m of maps){for(const c of [m.condition,...m.exceptions.map(e=>e.condition),...(m.fulfillment?[m.fulfillment]:[])]){const errs=E.validateCondition(c,defs);if(errs.length)throw new Error(errs.join(';'));}if(!['O','F','AUTH'].includes(m.kind))throw new Error('规范类型无效');if(m.kind==='AUTH'?m.fulfillment!==null:!m.fulfillment||typeof m.fulfillment!=='object')throw new Error(m.id+'：'+(m.kind==='AUTH'?'授权规则的 fulfillment 必须为 null':'义务/禁止规则必须有 fulfillment'));if(m.kind==='F'&&!own(m.fulfillment,'not'))throw new Error(m.id+'：禁止规则的 fulfillment 表示遵守禁止，必须写成 {not: 被禁止的行为}');}
  if(!Array.isArray(assets.registry.versions)||new Set(assets.registry.versions.map(v=>v.versionId)).size!==assets.registry.versions.length)throw new Error('法律版本 id 重复');
  const sources=input.sources===undefined?[]:input.sources;if(!Array.isArray(sources)||sources.length>500||new Set(sources.map(s=>s?.id)).size!==sources.length||sources.some(s=>!s||typeof s.id!=='string'||typeof s.text!=='string'))throw new Error('来源必须有唯一id和原文');
  if(input.events!==undefined){T.validate(input.events);for(const event of input.events)if(!sources.some(s=>s.id===event.sourceId))throw new Error('时间线事件引用不存在的来源 '+event.sourceId);}
