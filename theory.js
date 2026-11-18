@@ -458,10 +458,10 @@ window.LexChainTheory = [
   {
     "id": "D16",
     "name": "行为道义逻辑（ADL, Act-based）",
-    "tag": "已实现行为身份而非行动逻辑",
-    "formula": "F_aα ≝ O_a¬E(a,α)（可选定义；需固定行动与命题类型）",
-    "scope": "不会因都涉及加班就把支付义务与安排禁令当成矛盾。",
-    "note": "actionKey标记冲突范围；真实规则试点区分解除、终止、支付和超时安排。 不会因都涉及加班就把支付义务与安排禁令当成矛盾。",
+    "tag": "已实现主体相关行动道义逻辑",
+    "formula": "O[x](α) ≡ P[x](α) ∧ F[x](~α)；P[x](α+β) ≡ P[x](α) ∧ P[x](β)；Pw[x](α&β) → Pw[x](α)",
+    "scope": "未接入案件分析；工作台仍用actionKey区分解除、终止、支付和超时安排。",
+    "note": "logics/action.js：有限带标迁移系统；每个原子行动有唯一承担者；单步行动代数 a、ANY、+、&、~；程序 ;、*、?(φ)；按承担者计算的强许可P、弱许可Pw、禁止F、义务O，以及[π]φ、<π>φ。 未接入案件分析；工作台仍用actionKey区分解除、终止、支付和超时安排。",
     "references": [
       {
         "id": "vonWright1963",
@@ -475,21 +475,22 @@ window.LexChainTheory = [
       }
     ],
     "background": "行动类型、行动发生与行为后果需要不同类型；不能用字符串替代行动代数。",
-    "module": "actionKey标记冲突范围；真实规则试点区分解除、终止、支付和超时安排。",
-    "business": "不会因都涉及加班就把支付义务与安排禁令当成矛盾。",
+    "module": "logics/action.js：有限带标迁移系统；每个原子行动有唯一承担者；单步行动代数 a、ANY、+、&、~；程序 ;、*、?(φ)；按承担者计算的强许可P、弱许可Pw、禁止F、义务O，以及[π]φ、<π>φ。",
+    "business": "未接入案件分析；工作台仍用actionKey区分解除、终止、支付和超时安排。",
     "tests": [
+      "tests/logics.test.js",
       "tests/labor-pilots.test.js",
       "tests/workbench.test.js"
     ],
-    "nextStep": "维护经审核的行为同一性与分解表，再研究行动组合。"
+    "nextStep": "把经审核的行为同一性表编译成迁移模型，接入案件分析。"
   },
   {
     "id": "D17",
     "name": "信念—道义交叉（BDL）",
-    "tag": "已实现信念算子但未建立信念—义务交互",
-    "formula": "B_aφ 不一般蕴涵 φ；法律上的故意需要额外主观与客观要件",
-    "scope": "未接入案件分析。",
-    "note": "logics/epistemic.js含KD45信念B[a]，可与O在同一模型中求值；尚无信念触发义务的交互公理或BDI结构。 未接入案件分析。",
+    "tag": "已实现信念—道义交互模型",
+    "formula": "O[a]φ（事实相关）、Ob[a]φ（信念相关）、Ok[a]φ（知识相关）、Om[a]φ（信念下最坏情况最优）彼此独立；B[a]φ 不蕴涵 φ",
+    "scope": "未接入案件分析；法律上的故意、过失仍需另行认定。",
+    "note": "logics/belief-deontic.js：同一有限模型中分开现实事实、各主体KD45信念与S5知识、可选行动划分及优劣排序；按Kolodny & MacFarlane 2010定义信息相关的应当，含矿工案例。 未接入案件分析；法律上的故意、过失仍需另行认定。",
     "references": [
       {
         "id": "SEP-Epistemic",
@@ -503,20 +504,20 @@ window.LexChainTheory = [
       }
     ],
     "background": "B_aφ不蕴涵φ；故意、过失、知识和意图需额外法律及认知条件。",
-    "module": "logics/epistemic.js含KD45信念B[a]，可与O在同一模型中求值；尚无信念触发义务的交互公理或BDI结构。",
-    "business": "未接入案件分析。",
+    "module": "logics/belief-deontic.js：同一有限模型中分开现实事实、各主体KD45信念与S5知识、可选行动划分及优劣排序；按Kolodny & MacFarlane 2010定义信息相关的应当，含矿工案例。",
+    "business": "未接入案件分析；法律上的故意、过失仍需另行认定。",
     "tests": [
       "tests/logics.test.js"
     ],
-    "nextStep": "确定是否需要“相信即应当”类交互，并用fusion.js检查坍塌。"
+    "nextStep": "为“明知/应知”条款建立经审核的信息集映射。"
   },
   {
     "id": "D18",
     "name": "量化动态道义逻辑（Quantified DDL）",
-    "tag": "未实现量化动态道义逻辑",
-    "formula": "∀x[α]φ 与 [α]∀xφ 的等价需域、绑定及程序依赖等条件；此处不作无条件交换",
-    "scope": "遍历多个案件或主体不是量词语义。",
-    "note": "无一阶变量域、量词、程序及道义混合求值器。 遍历多个案件或主体不是量词语义。",
+    "tag": "已实现有限域量化动态道义逻辑",
+    "formula": "FORALL[x]、EXISTS[x]、PICK[x](π) ≝ ∪_d π[x:=d]；O[t](α) 的承担者 t 可为约束变量",
+    "scope": "未接入案件分析；有限域上是模型检查，不是一阶证明。",
+    "note": "logics/quantified-action.js：有限常元域上的带参数谓词与行动、量词、程序内变量绑定、按参数位置确定承担者；静态检查自由变量、元数与承担者一致。 未接入案件分析；有限域上是模型检查，不是一阶证明。",
     "references": [
       {
         "id": "SEP-Dynamic",
@@ -535,18 +536,20 @@ window.LexChainTheory = [
       }
     ],
     "background": "量词与动态/义务算子交换依赖域、变量绑定和程序条件。",
-    "module": "无一阶变量域、量词、程序及道义混合求值器。",
-    "business": "遍历多个案件或主体不是量词语义。",
-    "tests": [],
-    "nextStep": "先考虑有限显式主体实例化，避免一开始采用任意量化系统。"
+    "module": "logics/quantified-action.js：有限常元域上的带参数谓词与行动、量词、程序内变量绑定、按参数位置确定承担者；静态检查自由变量、元数与承担者一致。",
+    "business": "未接入案件分析；有限域上是模型检查，不是一阶证明。",
+    "tests": [
+      "tests/logics.test.js"
+    ],
+    "nextStep": "从案件材料生成有限域与行动实例。"
   },
   {
     "id": "D19",
     "name": "多主体可废止道义逻辑（MADL）",
-    "tag": "未实现多主体道义演算",
-    "formula": "O_Gφ 不一般等于 ∧_{a∈G} O_aφ_a；任务分解需要独立假设",
-    "scope": "关系片段可记录双方，但不自动分配连带责任或推断集体义务。",
-    "note": "仅有主体、承担者和范围隔离；无群体策略/规范合并演算。 关系片段可记录双方，但不自动分配连带责任或推断集体义务。",
+    "tag": "已实现多主体与群体可废止道义",
+    "formula": "O[G](a&b) 与 ∧_{x∈G} O[x](…) 互不蕴涵；高优先级可遵守冲突规范推翻低优先级，同级冲突报告两难",
+    "scope": "未接入案件分析；连带责任分配仍需法律规则另定。",
+    "note": "logics/action.js（MADL扩展）：群体作为独立承担者；可废止规范{bearer,kind,act,when,priority}生成违反标记；同主体同级不可同时遵守时列为两难而不静默选择。 未接入案件分析；连带责任分配仍需法律规则另定。",
     "references": [
       {
         "id": "Horty2001",
@@ -565,20 +568,20 @@ window.LexChainTheory = [
       }
     ],
     "background": "群体义务不一般等于成员义务合取，分工需要另外假设。",
-    "module": "仅有主体、承担者和范围隔离；无群体策略/规范合并演算。",
-    "business": "关系片段可记录双方，但不自动分配连带责任或推断集体义务。",
+    "module": "logics/action.js（MADL扩展）：群体作为独立承担者；可废止规范{bearer,kind,act,when,priority}生成违反标记；同主体同级不可同时遵守时列为两难而不静默选择。",
+    "business": "未接入案件分析；连带责任分配仍需法律规则另定。",
     "tests": [
-      "tests/relations.test.js"
+      "tests/logics.test.js"
     ],
-    "nextStep": "先精确定义派遣、用工等有限主体角色和责任来源。"
+    "nextStep": "把劳动法中的用人单位与劳务派遣共同义务建成群体模型。"
   },
   {
     "id": "D20",
     "name": "道义高阶逻辑（Deontic HOL）",
-    "tag": "未实现HOL嵌入",
-    "formula": "λx.F(x) 为谓词；O 的输入类型须另定义。Oφ 不推出事实 φ",
-    "scope": "规则数据结构与嵌套O不构成高阶逻辑。",
-    "note": "没有HOL翻译器或证明助手输出。 规则数据结构与嵌套O不构成高阶逻辑。",
+    "tag": "已写Isabelle/HOL浅嵌入，已用Isabelle2026机器检查",
+    "formula": "pr = i ⇒ bool；Ob p ≡ λw. ∀v. R w v ⟶ p v；高阶量化 mall :: ('a ⇒ pr) ⇒ pr",
+    "scope": "未接入案件分析。",
+    "note": "formal/LexChain_Deontic.thy：Benzmüller–Paulson式浅嵌入，含KD、个体与命题量化、Barcan公式、主体相关行动道义，及以Nitpick检出的非定理。 已用Isabelle2026通过isabelle build检查：全部引理自动证明，三处Nitpick反例在开启user_axioms后均为真反例。 未接入案件分析。",
     "references": [
       {
         "id": "Church1940",
@@ -592,18 +595,21 @@ window.LexChainTheory = [
       }
     ],
     "background": "高阶嵌入需命题/个体/谓词类型、λ项及相应证明语义。",
-    "module": "没有HOL翻译器或证明助手输出。",
-    "business": "规则数据结构与嵌套O不构成高阶逻辑。",
-    "tests": [],
-    "nextStep": "先把已有有限求解器性质形式化，再决定是否用HOL浅嵌入复核。"
+    "module": "formal/LexChain_Deontic.thy：Benzmüller–Paulson式浅嵌入，含KD、个体与命题量化、Barcan公式、主体相关行动道义，及以Nitpick检出的非定理。",
+    "business": "未接入案件分析。",
+    "tests": [
+      "formal/LexChain_Deontic.thy",
+      "formal/ROOT"
+    ],
+    "nextStep": "继续把更多模块（信念—义务、自指）的性质写入Isabelle并机器检查。"
   },
   {
     "id": "D21",
     "name": "道义自指悖论消解",
-    "tag": "未实现一般自指消解",
-    "formula": "O(Oφ) 是模态迭代，本身不等于自指；分层设计需类型与语法检查",
-    "scope": "规则更新记录不证明任意自指规范一致。",
-    "note": "依赖环与优先环检查只是有限图约束，不是悖论消解演算。 规则更新记录不证明任意自指规范一致。",
+    "tag": "已实现Kripke不动点自指规范分析",
+    "formula": "r1: ~binds(r1) 为悖论（任何不动点中都无定义）；r2: binds(r2) 为无根；最小不动点由全u经至多N轮得到",
+    "scope": "未接入案件分析；只分析显式写出的规范引用。",
+    "note": "logics/self-reference.js：规范可用binds(n)引用自身或其他规范的约束力；强Kleene三值求值；输出有根/无根/悖论分类与经典不动点，并对输出复核单调性与最小性。 未接入案件分析；只分析显式写出的规范引用。",
     "references": [
       {
         "id": "SEP-Types",
@@ -617,12 +623,12 @@ window.LexChainTheory = [
       }
     ],
     "background": "模态迭代不是自指；类型分层必须在语言与推导规则中明确。",
-    "module": "依赖环与优先环检查只是有限图约束，不是悖论消解演算。",
-    "business": "规则更新记录不证明任意自指规范一致。",
+    "module": "logics/self-reference.js：规范可用binds(n)引用自身或其他规范的约束力；强Kleene三值求值；输出有根/无根/悖论分类与经典不动点，并对输出复核单调性与最小性。",
+    "business": "未接入案件分析；只分析显式写出的规范引用。",
     "tests": [
-      "tests/workbench.test.js"
+      "tests/logics.test.js"
     ],
-    "nextStep": "先拒绝未定义的自引用输入；若研究自指需选定语法和语义。"
+    "nextStep": "把规则库中“本条/前款”式的相互引用编译为binds(n)。"
   },
   {
     "id": "D22",
@@ -684,10 +690,10 @@ window.LexChainTheory = [
   {
     "id": "D24",
     "name": "超序列道义演算（Hypersequent）",
-    "tag": "未实现超序列演算",
-    "formula": "Γ₁⊢Δ₁ | … | Γ_n⊢Δ_n（超序列结构）；模态引入规则须指明具体演算及侧条件",
-    "scope": "推导图多个节点不等于hypersequent。",
-    "note": "KD使用闭合表，未实现超序列规则。 推导图多个节点不等于hypersequent。",
+    "tag": "已实现S5超序列演算（Anderson–Kanger道义归约），证明与反模型均独立检查",
+    "formula": "Γ₁⊢Δ₁ | … | Γₙ⊢Δₙ；□L：G|Γ,□A⊢Δ|Σ⊢Π ⇐ G|Γ,□A⊢Δ|Σ,A⊢Π；□R：G|Γ⊢□A,Δ ⇐ G|Γ⊢□A,Δ|⊢A；O A ≔ □(¬A→viol)，公理 ◇¬viol",
+    "scope": "未接入案件分析。嵌套道义算子的语义与KD不同。",
+    "note": "logics/hypersequent.js：S5超序列演算（Kleene式累积G3变体，全部规则可逆，□R按已有见证阻断以保证终止），未证出时由饱和超序列直接给出S5反模型；道义算子按Anderson–Kanger归约翻译。logics/hypersequent-checker.js不加载求解器，独立重做翻译并逐条重放规则或在S5中求值反模型。 未接入案件分析。模态深度为1的道义公式与KD结论一致（400个随机公式与KD闭合表对照）；嵌套道义算子时不同，例如 O p → O O p 在此有效、在KD中无效。",
     "references": [
       {
         "id": "Avron1991",
@@ -701,10 +707,13 @@ window.LexChainTheory = [
       }
     ],
     "background": "Hypersequent包含多个序列及外部结构规则，需要指定演算及侧条件。",
-    "module": "KD使用闭合表，未实现超序列规则。",
-    "business": "推导图多个节点不等于hypersequent。",
-    "tests": [],
-    "nextStep": "作为独立证明论基线，先选一个逻辑及成熟演算。"
+    "module": "logics/hypersequent.js：S5超序列演算（Kleene式累积G3变体，全部规则可逆，□R按已有见证阻断以保证终止），未证出时由饱和超序列直接给出S5反模型；道义算子按Anderson–Kanger归约翻译。logics/hypersequent-checker.js不加载求解器，独立重做翻译并逐条重放规则或在S5中求值反模型。",
+    "business": "未接入案件分析。模态深度为1的道义公式与KD结论一致（400个随机公式与KD闭合表对照）；嵌套道义算子时不同，例如 O p → O O p 在此有效、在KD中无效。",
+    "tests": [
+      "tests/hypersequent.test.js",
+      "tests/architecture.test.js"
+    ],
+    "nextStep": "为KD45或KD本身选定成熟的超序列/嵌套序列演算（如Lahav 2013、Kuznets–Lellmann嫁接超序列），使嵌套道义算子也与KD一致。"
   },
   {
     "id": "D25",
@@ -843,10 +852,10 @@ window.LexChainTheory = [
   {
     "id": "D29",
     "name": "元规范自指道义公式",
-    "tag": "可算嵌套O但未实现元规范",
-    "formula": "O(Oφ) 是可在KD中求值的嵌套模态；不等于自指或高阶量化",
+    "tag": "已实现规范命名与自引用（见D21）",
+    "formula": "O(Oφ) 只是模态嵌套；真正的自引用用 binds(n) 表达，见D21",
     "scope": "版本审核是工程治理，不等于元规范逻辑判断。",
-    "note": "KD支持有限O/P嵌套；没有规范命名、自引用与合法性元规则语言。 版本审核是工程治理，不等于元规范逻辑判断。",
+    "note": "嵌套O/P由KD求值；规范命名、自引用与约束力判断由logics/self-reference.js实现。 版本审核是工程治理，不等于元规范逻辑判断。",
     "references": [
       {
         "id": "SEP-DL",
@@ -860,20 +869,20 @@ window.LexChainTheory = [
       }
     ],
     "background": "O(Oφ)是对象语言中的模态迭代，不自动是二阶逻辑或自指。",
-    "module": "KD支持有限O/P嵌套；没有规范命名、自引用与合法性元规则语言。",
+    "module": "嵌套O/P由KD求值；规范命名、自引用与约束力判断由logics/self-reference.js实现。",
     "business": "版本审核是工程治理，不等于元规范逻辑判断。",
     "tests": [
-      "tests/modal.test.js"
+      "tests/logics.test.js"
     ],
-    "nextStep": "先明确规范对象与审核规则类型，保持与对象层判断分开。"
+    "nextStep": "加入“上位法优于下位法”等合法性元规则。"
   },
   {
     "id": "D30",
     "name": "超推导道义演算（Superdeduction）",
-    "tag": "已实现有限依赖闭包但非超推导",
-    "formula": "有限类型依赖闭包已实现；Superdeduction的公理编译与一般证明搜索尚未实现",
-    "scope": "新增例外可以撤回结论；不能照搬单调后承保证。",
-    "note": "工作台有有限无环依赖闭包及检查器；未实现Superdeduction编译或一般理论证明搜索。 新增例外可以撤回结论；不能照搬单调后承保证。",
+    "tag": "已实现命题超推导：定义编译为推理规则，证明与反模型均独立检查",
+    "formula": "h ≔ φ 编译为 h-R：{Γ,Aᵢ⊢Bᵢ,Δ}ᵢ ⟹ Γ⊢h,Δ 与 h-L：{Γ,Aᵢ⊢Bᵢ,Δ}ᵢ ⟹ Γ,h⊢Δ，(Aᵢ,Bᵢ) 为以G3完全分解 φ 所得的叶",
+    "scope": "只有命题层面；单调，新增例外不会撤回结论。",
+    "note": "logics/superdeduction.js：按Brauner–Houtmann–Kirchner把无环命题定义编译成左右规则，在G3加编译规则中证明搜索，并与直接展开定义的步数对照；附合成的劳动合同法第39/40/42条解除理论。logics/superdeduction-checker.js不加载求解器，用真值表检查每条编译规则与定义等价（可靠且可逆），再逐步重放证明或检查反模型。工作台的有限依赖闭包（workbench/chain.js）仍保留，属于应用层。 只有命题层面，不含量词与本征变元条件；单调，新增例外不会撤回已证结论。未接入案件分析。",
     "references": [
       {
         "id": "Superdeduction2007",
@@ -887,12 +896,12 @@ window.LexChainTheory = [
       }
     ],
     "background": "Superdeduction研究将理论公理编译为推理规则，不能用φ**标记代替定义。",
-    "module": "工作台有有限无环依赖闭包及检查器；未实现Superdeduction编译或一般理论证明搜索。",
-    "business": "新增例外可以撤回结论；不能照搬单调后承保证。",
+    "module": "logics/superdeduction.js：按Brauner–Houtmann–Kirchner把无环命题定义编译成左右规则，在G3加编译规则中证明搜索，并与直接展开定义的步数对照；附合成的劳动合同法第39/40/42条解除理论。logics/superdeduction-checker.js不加载求解器，用真值表检查每条编译规则与定义等价（可靠且可逆），再逐步重放证明或检查反模型。工作台的有限依赖闭包（workbench/chain.js）仍保留，属于应用层。",
+    "business": "只有命题层面，不含量词与本征变元条件；单调，新增例外不会撤回已证结论。未接入案件分析。",
     "tests": [
-      "tests/workbench.test.js",
-      "tests/labor-pilots.test.js"
+      "tests/superdeduction.test.js",
+      "tests/architecture.test.js"
     ],
-    "nextStep": "先完整检查真实规则链的选择与依赖，再研究理论编译。"
+    "nextStep": "扩展到一阶（量词规则与本征变元条件），并研究如何与可撤回的例外机制结合。"
   }
 ];
