@@ -25,7 +25,7 @@ function run(value,assets){
  if(input.chain!==undefined){
   onlyKeys(input.chain,['format','catalog','input','selectedIds','policy'],'联合规则输入格式或字段无效');
   S.need(S.plain(input.chain.input),'联合规则输入无效');
-  onlyKeys(input.chain.input,['facts','context','sources','events','evidence'],'案件输入格式或字段无效');
+  onlyKeys(input.chain.input,['facts','context','employment','sources','events','evidence'],'案件输入格式或字段无效');
   S.need(input.chain.input.facts===undefined||S.plain(input.chain.input.facts),'案件事实必须是对象');
   S.need(S.plain(input.chain.input.context),'案件上下文必须是对象');
   for(const key of ['sources','events','evidence'])S.need(input.chain.input[key]===undefined||Array.isArray(input.chain.input[key]),'案件'+key+'必须是数组');

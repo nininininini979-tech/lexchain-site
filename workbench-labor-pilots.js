@@ -20,7 +20,7 @@ function build(id,assets){
  catalog.note='现有劳动规则的研究映射，所有节点均RESEARCH_ONLY；没有新增法律审核、原文认证、优先批准或完备要件声明。';
  const subject='研究示例劳动者甲',period='2026-10',facts=S.clone(d.facts),context={subject,period,eventDate:'2026-11-01',asOf:'2026-11-02',jurisdiction:'CN',classificationPolicy:'explicit-review-v1',factAssessments:{}};
  for(const f of assets.rules.facts)if(f.nature==='LEGAL_CLASSIFICATION'&&Object.prototype.hasOwnProperty.call(facts,f.key))context.factAssessments[f.key]={value:facts[f.key],status:'PENDING',kind:'LEGAL_CLASSIFICATION',reason:'合成演练候选，尚无独立法律分类审核，不作为已经查明的案件事实'};
- const input={facts,context,sources:[],events:[],evidence:[]},selectedIds=[...d.ruleIds];
+ const input={facts,context,employment:null,sources:[],events:[],evidence:[]},selectedIds=[...d.ruleIds];
  const requirements=catalog.rules.map(n=>({rule:n.id,condition:S.clone(n.condition),depends:S.clone(n.depends),fulfillment:S.clone(n.fulfillment),factKeys:S.clone(assets.mapping.rules.find(m=>m.id===n.id).factKeys||[])}));
  const exceptions=catalog.rules.map(n=>({rule:n.id,exceptions:S.clone(n.exceptions),limitations:S.clone(assets.mapping.rules.find(m=>m.id===n.id).limits||[])}));
  const sources=d.ruleIds.map(rid=>{const rule=assets.rules.rules.find(r=>r.id===rid);return {ruleId:rid,reference:rule.source,repositoryExcerpt:rule.text,sourceStatus:'REPOSITORY_REFERENCE_NOT_VERIFIED_ORIGINAL',reviewStatus:'PENDING',reviewQuestions:['需补权威原文快照、URL、日期、法域与适用版本；仓库节选不是本次核实的法律原文。']};});

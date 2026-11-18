@@ -58,14 +58,21 @@ function validate(input,assets){
  if(input.events!==undefined){T.validate(input.events);for(const event of input.events)if(!sources.some(s=>s.id===event.sourceId))throw new Error('时间线事件引用不存在的来源 '+event.sourceId);}
  const evidence=input.evidence===undefined?[]:input.evidence;if(!Array.isArray(evidence)||evidence.length>500)throw new Error('证据批次过多');
  for(const e of evidence){if(!e||typeof e!=='object'||Array.isArray(e)||!Array.isArray(e.spans===undefined?[]:e.spans)||(e.spans||[]).length>500)throw new Error('证据批次或跨度无效');if(!sources.some(s=>s.id===e.sourceId))throw new Error('证据引用不存在的来源');E.assertFacts(e.facts,assets.rules.facts);}
+ if(input.employment!==undefined&&input.employment!==null){try{T.validateEmployment(input.employment);}catch(e){throw new Error('employment 无效：'+e.message);}}
 }
 function analyze(input,assets){
- validate(input,assets);input=clone({facts:input.facts===undefined?{}:input.facts,context:input.context===undefined?{}:input.context,events:input.events===undefined?[]:input.events,sources:input.sources===undefined?[]:input.sources,evidence:input.evidence===undefined?[]:input.evidence});
+ validate(input,assets);input=clone({facts:input.facts===undefined?{}:input.facts,context:input.context===undefined?{}:input.context,employment:input.employment===undefined?null:input.employment,events:input.events===undefined?[]:input.events,sources:input.sources===undefined?[]:input.sources,evidence:input.evidence===undefined?[]:input.evidence});
  const context=input.context,defs=Object.fromEntries(assets.rules.facts.map(f=>[f.key,f]));
  const timeline=input.events.length?T.project(input.events,context.asOf,context):null;
+ const employmentDates=input.employment?T.employmentDates(input.employment,context.asOf):null;
+ const allDerived={...timeline?.derivedFacts,...employmentDates?.derivedFacts};
  const facts={...input.facts},conflicts=[];
- for(const [k,v] of Object.entries(timeline?.derivedFacts||{})){
-  if(own(facts,k)&&facts[k]!==null&&facts[k]!==v){conflicts.push({fact:k,submitted:facts[k],timeline:v});facts[k]=null;}else if(!own(facts,k))facts[k]=v;
+ for(const [k,v] of Object.entries(allDerived)){
+  if(own(facts,k)&&facts[k]!==null&&facts[k]!==v){
+   const source=employmentDates?.derivedFacts&&own(employmentDates.derivedFacts,k)?'employment':timeline?.derivedFacts&&own(timeline.derivedFacts,k)?'timeline':'unknown';
+   conflicts.push(source==='employment'?{fact:k,submitted:facts[k],employment:v}:{fact:k,submitted:facts[k],timeline:v});
+   facts[k]=null;
+  }else if(!own(facts,k))facts[k]=v;
  }
  const qualification=qualify(facts,context,assets.rules.facts);Object.assign(facts,qualification.facts);
  const positiveHours=['overtime_workday_hours','overtime_weekend_hours','overtime_holiday_hours'].filter(k=>typeof facts[k]==='number'&&facts[k]>0);
@@ -115,7 +122,7 @@ function analyze(input,assets){
  const comparison=results.map(r=>({id:r.id,legacy:original.find(o=>o.id===r.id).status,computed:r.computedStatus,released:r.status,changed:original.find(o=>o.id===r.id).status!==r.computedStatus,reasons:r.mapping.limits}));
  const missing=new Map();results.forEach(r=>r.missingFacts.forEach(f=>missing.set(f.fact,f)));
  const report={engine:'LexChain v0.3 · 条件规范业务接入',status_policy:'2026-11-12',rulebase:assets.rules.meta.name,verdict:counts.REVIEW_REQUIRED?'研究计算已完成，法律适用待审核':counts.VIOLATION?'按当前事实，存在规则违反':'条件计算完成，仍需核对事实',verdict_symbol:'计算正确不等于事实真实或法律适用正确',status_counts:counts,rules:results,missing_facts:[...missing.values()],comparison,timeline,fact_conflicts:conflicts,evidence,boundary:assets.mapping.boundary,disclaimer:'采用原受控事实的研究映射；所有未获审核的法律版本不发布确定法律结论。原文匹配与人工确认均不证明材料真实。'};
- const certificate={format:'lexchain-business-certificate-v1',catalogSnapshot:clone(assets),catalogVersion:assets.mapping.version,registryVersion:assets.registry.version,input,derivedFacts:facts,timeline,evidence,conflicts,steps,comparison,statusCounts:counts};
+ const certificate={format:'lexchain-business-certificate-v1',catalogSnapshot:clone(assets),catalogVersion:assets.mapping.version,registryVersion:assets.registry.version,input,derivedFacts:facts,timeline,employmentDates,evidence,conflicts,steps,comparison,statusCounts:counts};
  if(context.factAssessments!==undefined||context.classificationPolicy!==undefined)certificate.qualification=qualification.rows;
  report.inputQualification=qualification.rows;
  report.unreviewedClassifications=assets.rules.facts.filter(d=>d.nature==='LEGAL_CLASSIFICATION'&&facts[d.key]!=null&&!qualification.rows.some(r=>r.fact===d.key&&r.status==='REVIEWED')).map(d=>({fact:d.key,label:d.label,status:'LEGACY_UNREVIEWED_INPUT'}));

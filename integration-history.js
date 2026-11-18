@@ -12,13 +12,13 @@ function validContext(p){
  if(p.ruleContexts!==undefined){need(p.ruleContexts&&typeof p.ruleContexts==='object'&&!Array.isArray(p.ruleContexts),'逐规则范围格式无效');for(const [id,c]of Object.entries(p.ruleContexts))need(/^R[0-9]+(?:-[A-Z0-9]+)*$/.test(id)&&c&&typeof c==='object'&&!Array.isArray(c)&&Object.keys(c).every(k=>['eventDate','jurisdiction'].includes(k))&&(c.eventDate===undefined||T.date(c.eventDate))&&(c.jurisdiction===undefined||typeof c.jurisdiction==='string'&&c.jurisdiction.trim()),'逐规则范围格式无效');}
 }
 // Metadata assigned by the log is not part of the computational input.
-function analysisInput(state){const clean=x=>{const {recordId,...rest}=x;return rest;};return {facts:state.factState,context:state.context,events:state.timeline,sources:state.sources.map(clean),evidence:state.evidence.map(clean)};}
+function analysisInput(state){const clean=x=>{const {recordId,...rest}=x;return rest;};return {facts:state.factState,context:state.context,employment:state.employment||null,events:state.timeline,sources:state.sources.map(clean),evidence:state.evidence.map(clean)};}
 function normalizeInput(input){const clean=x=>{const {recordId,...rest}=x;return rest;};return {...input,sources:input.sources.map(clean),evidence:input.evidence.map(clean)};}
 
 function replay(events,definitions,options={}){
  need(Array.isArray(events)&&events.length<=10000,'来源历史过大或格式错误');
  const knownRevision=options.knownRevision??events.length;need(Number.isInteger(knownRevision)&&knownRevision>=0&&knownRevision<=events.length,'历史修订号必须为有效整数');
- const defs=Object.fromEntries(definitions.map(f=>[f.key,f])),state={context:{},sources:[],facts:[],timeline:[],evidence:[],reviews:[],analyses:[]},ids=new Set();
+ const defs=Object.fromEntries(definitions.map(f=>[f.key,f])),state={context:{},employment:null,sources:[],facts:[],timeline:[],evidence:[],reviews:[],analyses:[]},ids=new Set();
  for(const event of events.slice(0,knownRevision)){need(event&&event.seq===ids.size+1&&typeof event.id==='string'&&!ids.has(event.id)&&typeof event.actor==='string'&&event.actor.trim()&&typeof event.recordedAt==='string'&&Number.isFinite(Date.parse(event.recordedAt)),'历史顺序、作者或记录时间无效');ids.add(event.id);const p=event.payload;need(p&&typeof p==='object'&&!Array.isArray(p),'历史内容格式错误');
   if(event.type==='SOURCE'){need(typeof p.id==='string'&&/^[\w-]{1,80}$/.test(p.id)&&typeof p.text==='string'&&p.text.trim()&&typeof p.title==='string'&&!state.sources.some(s=>s.id===p.id),'来源 id 重复或原文为空');state.sources.push({...p,recordId:event.id});}
   else if(event.type==='CONTEXT'){validContext(p);for(const [key,r]of Object.entries(p.factAssessments||{})){const d=defs[key];need(own(defs,key)&&!(r.status==='REVIEWED'&&d.nature==='LEGAL_CLASSIFICATION'&&r.kind==='STATEMENT')&&(r.value===null||(d.type==='bool'?typeof r.value==='boolean':typeof r.value==='number'&&Number.isFinite(r.value)&&(d.minimum===undefined||r.value>=d.minimum)&&(d.maximum===undefined||r.value<=d.maximum)&&(!d.integer||Number.isInteger(r.value)))),'事实复核字段或值无效');}state.context={...p};}
